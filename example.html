@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Examples - HTML Motion to GIF Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .example-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 350px;
+        }
+
+        .example-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .animation-area {
+            width: 100%;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 1. Spinning Circles */
+        .spinning-circle {
+            width: 80px;
+            height: 80px;
+            border: 4px solid #667eea;
+            border-top-color: #764ba2;
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+        }
+
+        .spinning-circle-dual {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 3px solid transparent;
+            border-top-color: #f093fb;
+            border-right-color: #f5576c;
+            border-radius: 50%;
+            animation: spin-dual 1.5s linear infinite;
+        }
+
+        .spinning-circle-dual::before {
+            content: '';
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border: 3px solid transparent;
+            border-bottom-color: #4facfe;
+            border-left-color: #00f2fe;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: spin 2s linear infinite reverse;
+        }
+
+        /* 2. Bouncing Balls */
+        .bouncing-ball {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 50%;
+            animation: bounce 1.2s ease-in-out infinite;
+            position: absolute;
+        }
+
+        .ball-1 { left: 20%; animation-delay: 0s; }
+        .ball-2 { left: 50%; animation-delay: 0.2s; }
+        .ball-3 { left: 80%; animation-delay: 0.4s; }
+
+        /* 3. Pulsing Boxes */
+        .pulsing-box {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 10px;
+            animation: pulse 1.5s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.5);
+        }
+
+        /* 4. Sliding Motion */
+        .sliding-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sliding-box {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            border-radius: 8px;
+            animation: slide 2s ease-in-out infinite;
+        }
+
+        /* 5. Rotating Squares */
+        .rotating-square {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 8px;
+            animation: rotate 2s linear infinite;
+        }
+
+        .rotating-square-nested {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .square-outer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 3px solid #667eea;
+            animation: rotate 3s linear infinite;
+            border-radius: 10px;
+        }
+
+        .square-inner {
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            border: 3px solid #764ba2;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: rotate 2s linear infinite reverse;
+            border-radius: 8px;
+        }
+
+        /* 6. Floating Elements */
+        .floating-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .floating-element {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .float-1 {
+            width: 50px;
+            height: 50px;
+            animation-delay: 0s;
+        }
+
+        .float-2 {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            animation-delay: 0.5s;
+            left: -20px;
+            top: 50%;
+        }
+
+        .float-3 {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            animation-delay: 1s;
+            right: -20px;
+            bottom: 50%;
+        }
+
+        /* 7. Gradient Shifts */
+        .gradient-shift {
+            width: 100px;
+            height: 100px;
+            border-radius: 15px;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient-shift 8s ease infinite;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .gradient-text {
+            font-size: 1.1em;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: text-gradient-shift 6s ease infinite;
+        }
+
+        /* Keyframe Animations */
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin-dual {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-80px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes slide {
+            0%, 100% {
+                transform: translateX(-100px);
+            }
+            50% {
+                transform: translateX(100px);
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(30px, -30px);
+            }
+            50% {
+                transform: translate(0, -50px);
+            }
+            75% {
+                transform: translate(-30px, -30px);
+            }
+        }
+
+        @keyframes gradient-shift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes text-gradient-shift {
+            0%, 100% {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            50% {
+                background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .examples-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .example-card {
+                min-height: 300px;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .footer p {
+            margin-bottom: 10px;
+        }
+
+        .footer a {
+            color: #ffeb3b;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Animation Examples</h1>
+        <p style="text-align: center; color: white; margin-bottom: 30px; font-size: 1.1em;">Comprehensive collection of CSS animations for HTML to GIF conversion</p>
+
+        <div class="examples-grid">
+            <!-- Example 1: Spinning Circles -->
+            <div class="example-card">
+                <div class="example-title">Spinning Circles</div>
+                <div class="animation-area">
+                    <div class="spinning-circle"></div>
+                </div>
+            </div>
+
+            <!-- Example 2: Dual Spinning Circles -->
+            <div class="example-card">
+                <div class="example-title">Dual Spinning Circles</div>
+                <div class="animation-area">
+                    <div class="spinning-circle-dual"></div>
+                </div>
+            </div>
+
+            <!-- Example 3: Bouncing Balls -->
+            <div class="example-card">
+                <div class="example-title">Bouncing Balls</div>
+                <div class="animation-area">
+                    <div class="bouncing-ball ball-1"></div>
+                    <div class="bouncing-ball ball-2"></div>
+                    <div class="bouncing-ball ball-3"></div>
+                </div>
+            </div>
+
+            <!-- Example 4: Pulsing Boxes -->
+            <div class="example-card">
+                <div class="example-title">Pulsing Box</div>
+                <div class="animation-area">
+                    <div class="pulsing-box"></div>
+                </div>
+            </div>
+
+            <!-- Example 5: Sliding Motion -->
+            <div class="example-card">
+                <div class="example-title">Sliding Motion</div>
+                <div class="animation-area">
+                    <div class="sliding-container">
+                        <div class="sliding-box"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 6: Rotating Squares -->
+            <div class="example-card">
+                <div class="example-title">Rotating Square</div>
+                <div class="animation-area">
+                    <div class="rotating-square"></div>
+                </div>
+            </div>
+
+            <!-- Example 7: Nested Rotating Squares -->
+            <div class="example-card">
+                <div class="example-title">Nested Rotating Squares</div>
+                <div class="animation-area">
+                    <div class="rotating-square-nested">
+                        <div class="square-outer"></div>
+                        <div class="square-inner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 8: Floating Elements -->
+            <div class="example-card">
+                <div class="example-title">Floating Elements</div>
+                <div class="animation-area">
+                    <div class="floating-container">
+                        <div class="floating-element float-1"></div>
+                        <div class="floating-element float-2"></div>
+                        <div class="floating-element float-3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 9: Gradient Shift -->
+            <div class="example-card">
+                <div class="example-title">Gradient Shift</div>
+                <div class="animation-area">
+                    <div class="gradient-shift"></div>
+                </div>
+            </div>
+
+            <!-- Example 10: Multiple Animations Combined -->
+            <div class="example-card">
+                <div class="example-title">Combined Animation</div>
+                <div class="animation-area">
+                    <div class="pulsing-box" style="animation: pulse 1s ease-in-out infinite, bounce 2s ease-in-out infinite;"></div>
+                </div>
+            </div>
+
+            <!-- Example 11: Spinning Gradient Circle -->
+            <div class="example-card">
+                <div class="example-title">Spinning Gradient Circle</div>
+                <div class="animation-area">
+                    <div class="spinning-circle" style="border: 4px solid; border-image: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c) 1; animation: spin 2s linear infinite;"></div>
+                </div>
+            </div>
+
+            <!-- Example 12: Wave Animation -->
+            <div class="example-card">
+                <div class="example-title">Wave Motion</div>
+                <div class="animation-area">
+                    <div class="bouncing-ball" style="width: 40px; height: 40px; left: 15%; animation: bounce 0.8s ease-in-out infinite;"></div>
+                    <div class="bouncing-ball" style="width: 40px; height: 40px; left: 35%; animation: bounce 0.8s ease-in-out infinite; animation-delay: 0.1s;"></div>
+                    <div class="bouncing-ball" style="width: 40px; height: 40px; left: 55%; animation: bounce 0.8s ease-in-out infinite; animation-delay: 0.2s;"></div>
+                    <div class="bouncing-ball" style="width: 40px; height: 40px; left: 75%; animation: bounce 0.8s ease-in-out infinite; animation-delay: 0.3s;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>HTML Motion to GIF Converter</strong></p>
+            <p>Convert these HTML animations to animated GIFs using the converter tool</p>
+            <p style="margin-top: 15px; font-size: 0.95em;">Created with ❤️ for animation enthusiasts</p>
+        </div>
+    </div>
+</body>
+</html>
