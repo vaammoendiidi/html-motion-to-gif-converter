@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  html-motion-to-gif-converter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: html-motion-to-gif-converter
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./input:/app/input
+      - ./output:/app/output
+      - ./config:/app/config
+    environment:
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+      - CONVERTER_TIMEOUT=30000
+      - MAX_FILE_SIZE=104857600
+    networks:
+      - converter-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    container_name: html-motion-converter-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - converter-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+volumes:
+  redis-data:
+    driver: local
+
+networks:
+  converter-network:
+    driver: bridge
